@@ -29,7 +29,6 @@
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
-//import date from "date";
 
 const isBusy = ref(false);
 const todoItems = reactive([]);
@@ -39,7 +38,7 @@ function formatDate(date) {
     year: "numeric",
     month: "long",
     day: "numeric",
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
     second: "2-digit",
     timeZoneName: "short",
@@ -57,7 +56,6 @@ onMounted(async () => {
   } catch {
     console.log("Failed");
   } finally {
-    // setTimeout(() => isBusy.value = false, 1000);
     isBusy.value = false
   }
 });
