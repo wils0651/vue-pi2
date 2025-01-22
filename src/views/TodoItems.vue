@@ -1,26 +1,27 @@
 <template>
   <header>
-    <h2>Todo Items</h2>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4">Todo Items</h1>
   </header>
   <main>
-    <h1>This is the Todo Items</h1>
+    <h2 class="text-xl mb-3">These are some Todo Items</h2>
     <WaitCursor :busy="isBusy" msg="Please wait..."></WaitCursor>
-    <table>
+    <table class="min-w-full border-collapse border border-gray-300">
       <thead>
-        <tr>
-          <td>Item</td>
-          <td>Date</td>
-          <td>Is Complete</td>
+        <tr class="bg-gray-200 text-left">
+          <th class="px-4 py-2 border border-gray-300">Item</th>
+          <th class="px-4 py-2 border border-gray-300">Date</th>
+          <th class="px-4 py-2 border border-gray-300">Is Complete</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, id) in todoItems" :key="id">
-          <td>{{ item.name }}</td>
-          <td>{{ item.createdDate }}</td>
-          <td>{{ item.isComplete }}</td>
+        <tr v-for="(item, id) in todoItems" :key="id" class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
+          <td class="px-4 py-2 border border-gray-300">{{ item.name }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ formatDate(item.createdDate) }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ item.isComplete }}</td>
         </tr>
       </tbody>
     </table>
+
   </main>
 </template>
 
@@ -32,6 +33,19 @@ import WaitCursor from "@/components/WaitCursor.vue";
 
 const isBusy = ref(false);
 const todoItems = reactive([]);
+
+function formatDate(date) {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZoneName: "short",
+  };
+  return new Date(date).toLocaleString(undefined, options);
+}
 
 onMounted(async () => {
   try {

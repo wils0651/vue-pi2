@@ -1,0 +1,10 @@
+/* src/assets/tailwind.css */
+
+/* Add Tailwind's base styles */
+@tailwind base;
+
+/* Add Tailwind's component styles */
+@tailwind components;
+
+/* Add Tailwind's utility classes */
+@tailwind utilities;
