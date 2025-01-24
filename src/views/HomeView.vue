@@ -9,6 +9,7 @@
       <thead>
         <tr class="bg-gray-200 text-left">
           <th class="px-4 py-2 border border-gray-300">Computer Name</th>
+          <th class="px-4 py-2 border border-gray-300">IP Address</th>
           <th class="px-4 py-2 border border-gray-300">Last Task</th>
           <th class="px-4 py-2 border border-gray-300">Completed Date</th>
         </tr>
@@ -17,6 +18,7 @@
         <tr v-for="(computerInfo, computerId) in computerInfos" :key="computerId"
           class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
           <td class="px-4 py-2 border border-gray-300">{{ computerInfo.computerName }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ computerInfo.ipAddress }}</td>
           <td class="px-4 py-2 border border-gray-300">{{ computerInfo.computerTaskName }}</td>
           <td class="px-4 py-2 border border-gray-300">{{ formatDate(computerInfo.messageDate) }}</td>
         </tr>
