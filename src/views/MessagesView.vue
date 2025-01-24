@@ -1,24 +1,23 @@
 <template>
   <header>
-    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4">Home</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4">Computer Messages</h1>
   </header>
   <main>
-    <h2 class="text-xl mb-3">Computer Info</h2>
     <WaitCursor :busy="isBusy" msg="Please wait..."></WaitCursor>
     <table class="min-w-full border-collapse border border-gray-300">
       <thead>
         <tr class="bg-gray-200 text-left">
           <th class="px-4 py-2 border border-gray-300">Computer Name</th>
-          <th class="px-4 py-2 border border-gray-300">Last Task</th>
-          <th class="px-4 py-2 border border-gray-300">Completed Date</th>
+          <th class="px-4 py-2 border border-gray-300">Task Name</th>
+          <th class="px-4 py-2 border border-gray-300">Created Date</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(computerInfo, computerId) in computerInfos" :key="computerId"
+        <tr v-for="(message, messageId) in messages" :key="messageId"
           class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
-          <td class="px-4 py-2 border border-gray-300">{{ computerInfo.computerName }}</td>
-          <td class="px-4 py-2 border border-gray-300">{{ computerInfo.computerTaskName }}</td>
-          <td class="px-4 py-2 border border-gray-300">{{ formatDate(computerInfo.messageDate) }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ message.computerName }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ message.computerTaskName }}</td>
+          <td class="px-4 py-2 border border-gray-300">{{ formatDate(message.createdDate) }}</td>
         </tr>
       </tbody>
     </table>
@@ -33,14 +32,14 @@ import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDate } from "@/shared/formatters";
 
 const isBusy = ref(false);
-const computerInfos = reactive([]);
+const messages = reactive([]);
 
 onMounted(async () => {
   try {
     isBusy.value = true;
-    const result = await axios("http://192.168.1.3/api/Message/ComputerInfo/List");
+    const result = await axios("http://192.168.1.3/api/Message");
     if (result.status === 200) {
-      computerInfos.splice(0, computerInfos.length, ...result.data);
+      messages.splice(0, messages.length, ...result.data);
     }
   } catch {
     console.log("Failed");
@@ -50,3 +49,5 @@ onMounted(async () => {
 });
 
 </script>
+
+<style></style>

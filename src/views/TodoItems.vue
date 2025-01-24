@@ -29,22 +29,10 @@
 import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
+import { formatDate } from "@/shared/formatters";
 
 const isBusy = ref(false);
 const todoItems = reactive([]);
-
-function formatDate(date) {
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-    timeZoneName: "short",
-  };
-  return new Date(date).toLocaleString(undefined, options);
-}
 
 onMounted(async () => {
   try {

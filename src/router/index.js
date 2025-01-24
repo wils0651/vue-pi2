@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TodoItems from '@/views/TodoItems.vue'
 import AddItem from '@/views/AddItem.vue'
+import MessagesView from '@/views/MessagesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/addItem',
       name: 'addItem',
       component: AddItem,
+    },
+    {
+      path: '/messages',
+      name: 'messages',
+      component: MessagesView,
     },
   ],
 })
