@@ -1,9 +1,9 @@
 <template>
   <header>
-    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4">Home</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Home</h1>
   </header>
   <main>
-    <h2 class="text-xl mb-3">Computer Info</h2>
+    <h2 class="text-xl mb-3 mx-2">Computer Info</h2>
     <WaitCursor :busy="isBusy" msg="Please wait..."></WaitCursor>
     <div v-for="(computerInfo, computerId) in computerInfos" :key="computerId">
       <ComputerInfo :computerInfo="computerInfo"></ComputerInfo>
