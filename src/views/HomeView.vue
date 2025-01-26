@@ -23,7 +23,7 @@ const computerInfos = reactive([]);
 onMounted(async () => {
   try {
     isBusy.value = true;
-    const result = await axios("http://192.168.1.3/api/Message/ComputerInfo/List");
+    const result = await axios("http://192.168.1.3/api/Computer/ComputerInfo/List");
     if (result.status === 200) {
       computerInfos.splice(0, computerInfos.length, ...result.data);
     }
