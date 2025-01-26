@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import TodoItems from '@/views/TodoItems.vue'
 import AddItem from '@/views/AddItem.vue'
 import MessagesView from '@/views/MessagesView.vue'
+import ComputerDetailView from '@/views/ComputerDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/messages',
       name: 'messages',
       component: MessagesView,
+    },
+    {
+      path: '/computer/:computerId',
+      name: 'computer',
+      component: ComputerDetailView,
     },
   ],
 })
