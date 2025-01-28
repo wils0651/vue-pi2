@@ -30,6 +30,4 @@ import { formatDate } from "@/shared/formatters";
 defineProps({
   computerInfo: { required: true, type: Object }
 });
-
-// :to="{ name: 'user', params: { userId: 123 }}
 </script>
