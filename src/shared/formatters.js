@@ -1,4 +1,6 @@
-export function formatDate(date) {
+import { format } from 'date-fns'
+
+export function formatDate3(date) {
   const options = {
     year: 'numeric',
     month: 'long',
@@ -9,4 +11,8 @@ export function formatDate(date) {
     timeZoneName: 'short',
   }
   return new Date(date).toLocaleString(undefined, options)
+}
+
+export function formatDate(date) {
+  return format(date, 'M/d/yyyy h:mm:ss a')
 }
