@@ -6,6 +6,7 @@
       <RouterLink to="/todoItems" class="hover:text-gray-200">Todo Items</RouterLink>
       <RouterLink to="/addItem" class="hover:text-gray-200">Add Item</RouterLink>
       <RouterLink to="/messages" class="hover:text-gray-200">Messages</RouterLink>
+      <RouterLink to="/probeData" class="hover:text-gray-200">Probe Data</RouterLink>
     </nav>
   </header>
   <main>

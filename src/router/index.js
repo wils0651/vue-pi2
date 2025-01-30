@@ -4,6 +4,7 @@ import TodoItems from '@/views/TodoItems.vue'
 import AddItem from '@/views/AddItem.vue'
 import MessagesView from '@/views/MessagesView.vue'
 import ComputerDetailView from '@/views/ComputerDetailView.vue'
+import ProbeDataView from '@/views/ProbeDataView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/computer/:computerId',
       name: 'computer',
       component: ComputerDetailView,
+    },
+    {
+      path: '/probeData',
+      name: 'probeData',
+      component: ProbeDataView,
     },
   ],
 })
