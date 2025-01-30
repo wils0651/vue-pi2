@@ -3,7 +3,7 @@
     <h1>Probe Data</h1>
   </header>
   <main>
-    <Scatter :data="$data" :options="options" />
+    <Scatter :data="$data" :options="options">Data not available</Scatter>
   </main>
 
 </template>

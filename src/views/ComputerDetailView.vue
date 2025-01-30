@@ -27,15 +27,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from 'vue-router'
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDate } from "@/shared/formatters";
 
 const isBusy = ref(false);
-const computerDetail = reactive({});
-const route = useRoute()
+const computerDetail = ref([]);
+const route = useRoute();
 
 onMounted(async () => {
   getDetails(route.params.computerId);
@@ -54,10 +54,7 @@ const getDetails = async (computerId) => {
     isBusy.value = true;
     const result = await axios(`http://192.168.1.3/api/Computer/computerDetail/${computerId}`);
     if (result.status === 200) {
-      //computerInfos.splice(0, computerInfos.length, ...result.data);
-      console.log(result.data);
-      //computerDetail({...result.data});
-      Object.assign(computerDetail, result.data);
+      computerDetail.value = { ...result.data };
     }
   } catch (error) {
     console.log("Failed");
