@@ -1,11 +1,10 @@
 <template>
   <header>
-    <h1>Probe Data</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Probe Data</h1>
   </header>
   <main>
     <WaitCursor :busy="isBusy" msg="Loading Data...."></WaitCursor>
-    <Scatter :data="{ datasets: [{ label: label, data: probeData, backgroundColor: backgroundColor }] }"
-      :options="chartOptions">Data not available</Scatter>
+    <Scatter :data="{ datasets: [dataset1, dataset2] }" :options="chartOptions">Data not available</Scatter>
   </main>
 
 </template>
@@ -18,15 +17,16 @@ import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
-//import { format } from "date-fns";
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
 const isBusy = ref(false);
-const probeData = ref([]);
+const probeData1 = ref([]);
+const probeData2 = ref([]);
 
-const label = 'Probe 1 Temperature';
-const backgroundColor = 'rgba(75, 192, 192, 0.6)';
+const dataset1 = ref({ label: 'Probe 1', data: probeData1, backgroundColor: 'rgba(75, 192, 192, 0.6)' });
+const dataset2 = ref({ label: 'Probe 2', data: probeData2, backgroundColor: 'rgba(175, 122, 92, 0.8)' });
+
 const chartOptions = {
   responsive: true,
   plugins: {
@@ -59,15 +59,24 @@ const chartOptions = {
   },
 };
 
-const getProbeData = async () => {
+const getProbeData = async (probeId) => {
   try {
     isBusy.value = true;
-    const result = await axios(`http://192.168.1.3/api/ProbeData`);
+    const result = await axios(`http://192.168.1.3/api/ProbeData/List/${probeId}`);
     if (result.status === 200) {
-      probeData.value = result.data.map((entry) => ({
-        x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
-        y: entry.temperature,
-      }));
+      if (probeId === 1) {
+        probeData1.value = result.data.map((entry) => ({
+          x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
+          y: entry.temperature,
+        }));
+      } else if (probeId === 2) {
+        probeData2.value = result.data.map((entry) => ({
+          x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
+          y: entry.temperature,
+        }));
+      } else {
+        console.log("Unknown probe id")
+      }
     }
   } catch (error) {
     console.log("Failed");
@@ -77,6 +86,9 @@ const getProbeData = async () => {
   }
 };
 
-onMounted(getProbeData)
+onMounted(async () => {
+  await getProbeData(1);
+  await getProbeData(2);
+})
 
 </script>
