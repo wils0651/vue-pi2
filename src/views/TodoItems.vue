@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4">Todo Items</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Todo Items</h1>
   </header>
   <main>
     <h2 class="text-xl mb-3">These are some Todo Items</h2>
