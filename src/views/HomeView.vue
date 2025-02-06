@@ -4,7 +4,7 @@
   </header>
   <main>
     <h2 class="text-xl mb-3 mx-4">Computer Info</h2>
-    <div class="container mx-auto">
+    <div class="container mx-4">
       <WaitCursor :busy="isLoadingComputerData" msg="Loading Computer Info.."></WaitCursor>
       <div class="flex flex-wrap -mx-2">
         <div v-for="(computerInfo, computerId) in computerInfos" :key="computerId">
@@ -13,7 +13,7 @@
       </div>
     </div>
     <h2 class="text-xl my-3 mx-4">Latest Temperature Readings</h2>
-    <div class="container mx-auto">
+    <div class="container mx-4">
       <WaitCursor :busy="isLoadingProbeData" msg="Loading Temerature Info..."></WaitCursor>
       <div class="flex flex-wrap -mx-2">
         <div v-for="(probeData, probeId) in probeDatas" :key="probeId">
