@@ -21,6 +21,14 @@
         </div>
       </div>
     </div>
+
+    <div v-show="areAnyUnclassifiedMessages">
+      <h2 class="text-xl my-3 mx-4">Unclassified Messages</h2>
+      <div class="container my-4 mx-4">
+        <UnclassifiedMessageGrid :unclassifiedMessages="unclassifiedMessages"></UnclassifiedMessageGrid>
+      </div>
+    </div>
+
   </main>
 </template>
 
@@ -30,11 +38,14 @@ import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import ComputerInfo from "@/components/ComputerInfo.vue";
 import ProbeDataTile from "@/components/ProbeDataTile.vue";
+import UnclassifiedMessageGrid from "@/components/UnclassifiedMessageGrid.vue";
 
-const isLoadingComputerData = ref(false);
-const isLoadingProbeData = ref(false);
+const isLoadingComputerData = ref(true);
+const isLoadingProbeData = ref(true);
+const areAnyUnclassifiedMessages = ref(false);
 const computerInfos = reactive([]);
 const probeDatas = reactive([]);
+const unclassifiedMessages = reactive([]);
 
 const getComputerData = async () => {
   try {
@@ -55,7 +66,6 @@ const getProbeData = async (probeId) => {
     isLoadingProbeData.value = true;
     const result = await axios(`http://192.168.1.3/api/ProbeData/Latest/${probeId}`);
     if (result.status === 200) {
-      console.log(result.data); // todo: remove
       probeDatas.splice(probeDatas.length, probeDatas.length, result.data);
     }
   } catch (error) {
@@ -66,10 +76,24 @@ const getProbeData = async (probeId) => {
   }
 };
 
+const getUnclassifiedMessages = async () => {
+  try {
+    const result = await axios("http://192.168.1.3/api/UnclassifiedMessage/Latest/5");
+    if (result.status === 200) {
+      unclassifiedMessages.splice(0, unclassifiedMessages.length, ...result.data);
+      areAnyUnclassifiedMessages.value = unclassifiedMessages.length > 0;
+    }
+  } catch (error) {
+    console.log("Failed to Get Unclassified Messages");
+    console.error(error);
+  }
+};
+
 onMounted(async () => {
   await getComputerData();
   await getProbeData(1);
   await getProbeData(2);
+  await getUnclassifiedMessages();
 });
 
 </script>

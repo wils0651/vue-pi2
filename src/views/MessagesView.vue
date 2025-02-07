@@ -4,23 +4,25 @@
   </header>
   <main>
     <WaitCursor :busy="isBusy" msg="Please wait..."></WaitCursor>
-    <table class="min-w-full border-collapse border border-gray-300">
-      <thead>
-        <tr class="bg-gray-200 text-left">
-          <th class="px-4 py-2 border border-gray-300">Computer Name</th>
-          <th class="px-4 py-2 border border-gray-300">Task Name</th>
-          <th class="px-4 py-2 border border-gray-300">Created Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(message, messageId) in messages" :key="messageId"
-          class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
-          <td class="px-4 py-2 border border-gray-300">{{ message.computerName }}</td>
-          <td class="px-4 py-2 border border-gray-300">{{ message.computerTaskName }}</td>
-          <td class="px-4 py-2 border border-gray-300">{{ formatDate(message.createdDate) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="container mx-4">
+      <table class="min-w-full border-collapse border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200 text-left">
+            <th class="px-4 py-2 border border-gray-300">Computer Name</th>
+            <th class="px-4 py-2 border border-gray-300">Task Name</th>
+            <th class="px-4 py-2 border border-gray-300">Created Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(message, messageId) in messages" :key="messageId"
+            class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
+            <td class="px-4 py-2 border border-gray-300">{{ message.computerName }}</td>
+            <td class="px-4 py-2 border border-gray-300">{{ message.computerTaskName }}</td>
+            <td class="px-4 py-2 border border-gray-300">{{ formatDate(message.createdDate) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </main>
 </template>
