@@ -89,6 +89,10 @@ const getProbeData = async (probeId) => {
 onMounted(async () => {
   await getProbeData(1);
   await getProbeData(2);
+  setInterval(async () => {
+     await getProbeData(1);
+     await getProbeData(2);
+  }, 60000);
 })
 
 </script>
