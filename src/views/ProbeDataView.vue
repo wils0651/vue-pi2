@@ -3,8 +3,10 @@
     <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Probe Data</h1>
   </header>
   <main>
-    <WaitCursor :busy="isBusy" msg="Loading Data...."></WaitCursor>
-    <Scatter :data="{ datasets: [dataset1, dataset2] }" :options="chartOptions">Data not available</Scatter>
+    <div class="container mx-4">
+      <Scatter :data="{ datasets: [dataset1, dataset2] }" :options="chartOptions">Data not available</Scatter>
+    </div>
+    <WaitCursor :busy="isBusy" msg=""></WaitCursor>
   </main>
 
 </template>
