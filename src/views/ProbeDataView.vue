@@ -1,39 +1,44 @@
 <template>
   <header>
-    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Probe Data</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Temperature Data</h1>
   </header>
   <main>
     <div class="container mx-4">
-      <Scatter :data="{ datasets: [dataset1, dataset2] }" :options="chartOptions">Data not available</Scatter>
+      <Scatter :data="datas" :options="chartOptions">Data not available</Scatter>
     </div>
-    <WaitCursor :busy="isBusy" msg=""></WaitCursor>
   </main>
-
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { Scatter } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale } from 'chart.js'
 import axios from "axios";
-import WaitCursor from "@/components/WaitCursor.vue";
 import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
-const isBusy = ref(false);
 const probeData1 = ref([]);
 const probeData2 = ref([]);
 
-const dataset1 = ref({ label: 'Probe 1', data: probeData1, backgroundColor: 'rgba(75, 192, 192, 0.6)' });
-const dataset2 = ref({ label: 'Probe 2', data: probeData2, backgroundColor: 'rgba(175, 122, 92, 0.8)' });
+const backgroundColor1 = 'rgba(52, 235, 103, 0.6)';
+const backgroundColor2 = 'rgba(131, 52, 235, 0.8)';
+
+const datas = computed(() => {
+  return {
+    datasets: [
+      { label: 'Probe 1', data: probeData1.value, backgroundColor: backgroundColor1 },
+      { label: 'Probe 2', data: probeData2.value, backgroundColor: backgroundColor2 }]
+  };
+});
 
 const chartOptions = {
   responsive: true,
   plugins: {
     legend: {
-      display: false,
+      display: true,
+      position: 'top',
     },
   },
   scales: {
@@ -63,7 +68,6 @@ const chartOptions = {
 
 const getProbeData = async (probeId) => {
   try {
-    isBusy.value = true;
     const result = await axios(`http://192.168.1.3/api/ProbeData/List/${probeId}`);
     if (result.status === 200) {
       if (probeId === 1) {
@@ -83,8 +87,6 @@ const getProbeData = async (probeId) => {
   } catch (error) {
     console.log("Failed");
     console.error(error);
-  } finally {
-    isBusy.value = false
   }
 };
 
@@ -92,8 +94,8 @@ onMounted(async () => {
   await getProbeData(1);
   await getProbeData(2);
   setInterval(async () => {
-     await getProbeData(1);
-     await getProbeData(2);
+    await getProbeData(1);
+    await getProbeData(2);
   }, 60000);
 })
 
