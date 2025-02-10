@@ -66,7 +66,6 @@ const chartOptions = {
   },
 };
 
-
 const getProbeData = async (probeId) => {
   try {
     const result = await axios(`http://192.168.1.3/api/ProbeData/List/${probeId}`);
