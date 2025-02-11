@@ -19,18 +19,25 @@ import { enUS } from 'date-fns/locale';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
-const probeData1 = ref([]);
-const probeData2 = ref([]);
+const probes = ref([]);
+const probeDatas = ref([]);
 
-const backgroundColor1 = 'rgba(52, 235, 103, 0.6)';
-const backgroundColor2 = 'rgba(131, 52, 235, 0.8)';
+const backgroundColors = [
+  'rgba(52, 235, 103, 0.6)',
+  'rgba(131, 52, 235, 0.8)',
+  'rgba(252, 186, 3, 0.8)',
+  'rgba(252, 3, 3, 0.8)',
+  'rgba(138, 2, 153, 0.8)',
+  'rgba(5, 242, 226, 0.8)',];
 
 const datas = computed(() => {
   return {
-    datasets: [
-      { label: 'Probe 1', data: probeData1.value, backgroundColor: backgroundColor1 },
-      { label: 'Probe 2', data: probeData2.value, backgroundColor: backgroundColor2 }]
-  };
+    datasets: probes.value.map((probe, index) => ({
+      label: probe.description,
+      data: probeDatas.value[probe.probeId],
+      backgroundColor: backgroundColors[index],
+    }))
+  }
 });
 
 const chartOptions = {
@@ -66,23 +73,30 @@ const chartOptions = {
   },
 };
 
+const getProbes = async () => {
+  try {
+    const result = await axios("http://192.168.1.3/api/Probe");
+    if (result.status === 200) {
+      probes.value = result.data.map((entry) => ({
+        probeId: entry.probeId,
+        description: entry.description,
+      }));
+      console.log(probes.value);
+    }
+  } catch (error) {
+    console.log("Failed");
+    console.error(error);
+  }
+};
+
 const getProbeData = async (probeId) => {
   try {
     const result = await axios(`http://192.168.1.3/api/ProbeData/List/${probeId}`);
     if (result.status === 200) {
-      if (probeId === 1) {
-        probeData1.value = result.data.map((entry) => ({
-          x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
-          y: entry.temperature,
-        }));
-      } else if (probeId === 2) {
-        probeData2.value = result.data.map((entry) => ({
-          x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
-          y: entry.temperature,
-        }));
-      } else {
-        console.log("Unknown probe id")
-      }
+      probeDatas.value[probeId] = result.data.map((entry) => ({
+        x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
+        y: entry.temperature,
+      }));
     }
   } catch (error) {
     console.log("Failed");
@@ -91,11 +105,14 @@ const getProbeData = async (probeId) => {
 };
 
 onMounted(async () => {
-  await getProbeData(1);
-  await getProbeData(2);
+  await getProbes();
+  for (const probe of probes.value) {
+    await getProbeData(probe.probeId);
+  };
   setInterval(async () => {
-    await getProbeData(1);
-    await getProbeData(2);
+    for (const probe of probes.value) {
+      await getProbeData(probe.probeId);
+    };
   }, 60000);
 })
 
