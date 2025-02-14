@@ -43,6 +43,8 @@ import UnclassifiedMessageGrid from "@/components/UnclassifiedMessageGrid.vue";
 const isLoadingComputerData = ref(true);
 const isLoadingProbeData = ref(true);
 const areAnyUnclassifiedMessages = ref(false);
+
+const probes = ref([]);
 const computerInfos = reactive([]);
 const probeDatas = reactive([]);
 const unclassifiedMessages = reactive([]);
@@ -60,6 +62,22 @@ const getComputerData = async () => {
     isLoadingComputerData.value = false
   }
 }
+
+const getProbes = async () => {
+  try {
+    const result = await axios("http://192.168.1.3/api/Probe");
+    if (result.status === 200) {
+      probes.value = result.data.map((entry) => ({
+        probeId: entry.probeId,
+        description: entry.description,
+      }));
+      console.log(probes.value);
+    }
+  } catch (error) {
+    console.log("Failed");
+    console.error(error);
+  }
+};
 
 const getProbeData = async (probeId) => {
   try {
@@ -91,8 +109,10 @@ const getUnclassifiedMessages = async () => {
 
 onMounted(async () => {
   await getComputerData();
-  await getProbeData(1);
-  await getProbeData(2);
+  await getProbes();
+  for (const probe of probes.value) {
+    await getProbeData(probe.probeId);
+  };
   await getUnclassifiedMessages();
 });
 
