@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TodoItems from '@/views/TodoItems.vue'
-import AddItem from '@/views/AddItem.vue'
 import MessagesView from '@/views/MessagesView.vue'
 import ComputerDetailView from '@/views/ComputerDetailView.vue'
 import ProbeDataView from '@/views/ProbeDataView.vue'
@@ -18,11 +17,6 @@ const router = createRouter({
       path: '/todoItems',
       name: 'todoItems',
       component: TodoItems,
-    },
-    {
-      path: '/addItem',
-      name: 'addItem',
-      component: AddItem,
     },
     {
       path: '/messages',

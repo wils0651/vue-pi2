@@ -3,6 +3,7 @@
     <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Todo Items</h1>
   </header>
   <main>
+    <AddTodoItem @reload-grid="getTodoItems"></AddTodoItem>
     <WaitCursor :busy="isBusy" msg="Please wait..."></WaitCursor>
     <div class="container mx-4">
       <h2 class="text-xl mb-3">These are some Todo Items</h2>
@@ -23,7 +24,6 @@
         </tbody>
       </table>
     </div>
-
   </main>
 </template>
 
@@ -32,11 +32,12 @@ import { ref, reactive, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDate } from "@/shared/formatters";
+import AddTodoItem from "@/components/AddTodoItem.vue";
 
 const isBusy = ref(false);
 const todoItems = reactive([]);
 
-onMounted(async () => {
+const getTodoItems = async () => {
   try {
     isBusy.value = true;
     const result = await axios("http://192.168.1.3/api/TodoItems");
@@ -48,6 +49,10 @@ onMounted(async () => {
   } finally {
     isBusy.value = false
   }
+};
+
+onMounted(async () => {
+  await getTodoItems();
 });
 
 </script>
