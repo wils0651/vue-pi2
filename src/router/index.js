@@ -4,6 +4,7 @@ import TodoItems from '@/views/TodoItems.vue'
 import MessagesView from '@/views/MessagesView.vue'
 import ComputerDetailView from '@/views/ComputerDetailView.vue'
 import ProbeDataView from '@/views/ProbeDataView.vue'
+import TemperatureStatisticsView from '@/views/TemperatureStatisticsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/probeData',
       name: 'probeData',
       component: ProbeDataView,
+    },
+    {
+      path: '/temperatureStatistics',
+      name: 'temperatureStatistics',
+      component: TemperatureStatisticsView,
     },
   ],
 })

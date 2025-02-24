@@ -1,17 +1,17 @@
 <template>
   <header>
-    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Temperature Data</h1>
+    <h1 class="text-4xl font-bold text-gray-800 tracking-tight mb-4 mt-1 mx-2">Temperature Statistics</h1>
   </header>
   <main>
     <div class="container mx-4">
-      <Scatter :data="datas" :options="chartOptions">Data not available</Scatter>
+      <Line :data="datas" :options="chartOptions">Data not available</Line>
     </div>
   </main>
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { Scatter } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale } from 'chart.js'
 import axios from "axios";
 import 'chartjs-adapter-date-fns';
@@ -21,13 +21,13 @@ import { getBackgroundColor } from '@/shared/chartColors';
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
 const probes = ref([]);
-const probeDatas = ref([]);
+const temperatureMeanDatas = ref([]);
 
 const datas = computed(() => {
   return {
     datasets: probes.value.map((probe, index) => ({
       label: probe.description,
-      data: probeDatas.value[probe.probeId],
+      data: temperatureMeanDatas.value[probe.probeId],
       backgroundColor: getBackgroundColor(index),
     }))
   }
@@ -50,7 +50,7 @@ const chartOptions = {
       },
       type: "time",
       time: {
-        unit: "hour",
+        unit: "day",
       },
       title: {
         display: true,
@@ -84,11 +84,11 @@ const getProbes = async () => {
 
 const getProbeData = async (probeId) => {
   try {
-    const result = await axios(`http://192.168.1.3/api/ProbeData/List/${probeId}`);
+    const result = await axios(`http://192.168.1.3/api/TemperatureStatistic/List/${probeId}`);
     if (result.status === 200) {
-      probeDatas.value[probeId] = result.data.map((entry) => ({
-        x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale
-        y: entry.temperature,
+      temperatureMeanDatas.value[probeId] = result.data.map((entry) => ({
+        x: new Date(entry.measurementDate), // Convert to Date object for Chart.js time scale
+        y: entry.mean,
       }));
     }
   } catch (error) {
@@ -97,16 +97,12 @@ const getProbeData = async (probeId) => {
   }
 };
 
+
 onMounted(async () => {
   await getProbes();
   for (const probe of probes.value) {
     await getProbeData(probe.probeId);
   };
-  setInterval(async () => {
-    for (const probe of probes.value) {
-      await getProbeData(probe.probeId);
-    };
-  }, 60000);
 })
 
 </script>
