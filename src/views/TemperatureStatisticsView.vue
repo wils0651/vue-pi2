@@ -29,6 +29,9 @@ const datas = computed(() => {
       label: probe.description,
       data: temperatureMeanDatas.value[probe.probeId],
       backgroundColor: getBackgroundColor(index),
+      pointRadius: 8,
+      pointStyle: 'rect',
+      pointBorderColor: 'black',
     }))
   }
 });
