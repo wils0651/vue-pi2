@@ -39,7 +39,7 @@ const messages = reactive([]);
 onMounted(async () => {
   try {
     isBusy.value = true;
-    const result = await axios("http://192.168.1.3/api/Message");
+    const result = await axios("http://192.168.50.3/api/Message");
     if (result.status === 200) {
       messages.splice(0, messages.length, ...result.data);
     }

@@ -71,7 +71,7 @@ const chartOptions = {
 
 const getProbes = async () => {
   try {
-    const result = await axios("http://192.168.1.3/api/Probe");
+    const result = await axios("http://192.168.50.3/api/Probe");
     if (result.status === 200) {
       probes.value = result.data.map((entry) => ({
         probeId: entry.probeId,
@@ -87,7 +87,7 @@ const getProbes = async () => {
 
 const getProbeData = async (probeId) => {
   try {
-    const result = await axios(`http://192.168.1.3/api/TemperatureStatistic/List/${probeId}`);
+    const result = await axios(`http://192.168.50.3/api/TemperatureStatistic/List/${probeId}`);
     if (result.status === 200) {
       temperatureMeanDatas.value[probeId] = result.data.map((entry) => ({
         x: new Date(entry.measurementDate), // Convert to Date object for Chart.js time scale

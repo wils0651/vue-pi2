@@ -29,7 +29,7 @@ const emit = defineEmits(['reloadGrid']);
 
 async function addItem() {
   try {
-    await axios.post("http://192.168.1.3/api/TodoItems", {
+    await axios.post("http://192.168.50.3/api/TodoItems", {
       name: name.value,
       isComplete: isComplete.value
     });

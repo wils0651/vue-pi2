@@ -54,7 +54,7 @@ watch(
 const getDetails = async (computerId) => {
   try {
     isBusy.value = true;
-    const result = await axios(`http://192.168.1.3/api/Computer/computerDetail/${computerId}`);
+    const result = await axios(`http://192.168.50.3/api/Computer/computerDetail/${computerId}`);
     if (result.status === 200) {
       computerDetail.value = { ...result.data };
     }

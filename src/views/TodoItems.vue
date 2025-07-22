@@ -40,7 +40,7 @@ const todoItems = reactive([]);
 const getTodoItems = async () => {
   try {
     isBusy.value = true;
-    const result = await axios("http://192.168.1.3/api/TodoItems");
+    const result = await axios("http://192.168.50.3/api/TodoItems");
     if (result.status === 200) {
       todoItems.splice(0, todoItems.length, ...result.data);
     }

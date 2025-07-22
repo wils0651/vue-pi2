@@ -52,7 +52,7 @@ const unclassifiedMessages = reactive([]);
 const getComputerData = async () => {
   try {
     isLoadingComputerData.value = true;
-    const result = await axios("http://192.168.1.3/api/Computer/ComputerInfo/List");
+    const result = await axios("http://192.168.50.3/api/Computer/ComputerInfo/List");
     if (result.status === 200) {
       computerInfos.splice(0, computerInfos.length, ...result.data);
     }
@@ -65,7 +65,7 @@ const getComputerData = async () => {
 
 const getProbes = async () => {
   try {
-    const result = await axios("http://192.168.1.3/api/Probe");
+    const result = await axios("http://192.168.50.3/api/Probe");
     if (result.status === 200) {
       probes.value = result.data.map((entry) => ({
         probeId: entry.probeId,
@@ -82,7 +82,7 @@ const getProbes = async () => {
 const getProbeData = async (probeId) => {
   try {
     isLoadingProbeData.value = true;
-    const result = await axios(`http://192.168.1.3/api/ProbeData/Latest/${probeId}`);
+    const result = await axios(`http://192.168.50.3/api/ProbeData/Latest/${probeId}`);
     if (result.status === 200) {
       probeDatas.splice(probeDatas.length, probeDatas.length, result.data);
     }
@@ -96,7 +96,7 @@ const getProbeData = async (probeId) => {
 
 const getUnclassifiedMessages = async () => {
   try {
-    const result = await axios("http://192.168.1.3/api/UnclassifiedMessage/Latest/5");
+    const result = await axios("http://192.168.50.3/api/UnclassifiedMessage/Latest/5");
     if (result.status === 200) {
       unclassifiedMessages.splice(0, unclassifiedMessages.length, ...result.data);
       areAnyUnclassifiedMessages.value = unclassifiedMessages.length > 0;
