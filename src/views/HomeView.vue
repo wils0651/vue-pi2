@@ -12,6 +12,7 @@
         </div>
       </div>
     </div>
+
     <h2 class="text-xl my-3 mx-4">Latest Temperature Readings</h2>
     <div class="container mx-4">
       <WaitCursor :busy="isLoadingProbeData" msg="Loading Temerature Info..."></WaitCursor>
@@ -19,6 +20,14 @@
         <div v-for="(probeData, probeId) in probeDatas" :key="probeId">
           <ProbeDataTile :probeData="probeData"></ProbeDataTile>
         </div>
+      </div>
+    </div>
+
+    <h2 class="text-xl my-3 mx-4">Garage Status</h2>
+    <div class="container mx-4">
+      <WaitCursor :busy="isLoadingGarageStatus" msg="Loading Garage Status..."></WaitCursor>
+      <div class="flex flex-wrap -mx-2">
+        <GarageData :garageStatus="garageStatus"></GarageData>
       </div>
     </div>
 
@@ -39,15 +48,18 @@ import WaitCursor from "@/components/WaitCursor.vue";
 import ComputerInfo from "@/components/ComputerInfo.vue";
 import ProbeDataTile from "@/components/ProbeDataTile.vue";
 import UnclassifiedMessageGrid from "@/components/UnclassifiedMessageGrid.vue";
+import GarageData from "@/components/GarageData.vue";
 
 const isLoadingComputerData = ref(true);
 const isLoadingProbeData = ref(true);
+const isLoadingGarageStatus = ref(true);
 const areAnyUnclassifiedMessages = ref(false);
 
 const probes = ref([]);
 const computerInfos = reactive([]);
 const probeDatas = reactive([]);
 const unclassifiedMessages = reactive([]);
+const garageStatus = ref({});
 
 const getComputerData = async () => {
   try {
@@ -94,6 +106,20 @@ const getProbeData = async (probeId) => {
   }
 };
 
+const getGarageStatus = async () => {
+  try {
+    const result = await axios("http://192.168.50.3/api/GarageDistance/Latest");
+    if (result.status === 200) {
+      console.log(result.data);
+      isLoadingGarageStatus.value = false;
+      garageStatus.value = result.data;
+    }
+  } catch (error) {
+    console.log("Failed to Get Garage Status");
+    console.error(error);
+  }
+};
+
 const getUnclassifiedMessages = async () => {
   try {
     const result = await axios("http://192.168.50.3/api/UnclassifiedMessage/Latest/5");
@@ -113,6 +139,7 @@ onMounted(async () => {
   for (const probe of probes.value) {
     await getProbeData(probe.probeId);
   };
+  await getGarageStatus();
   await getUnclassifiedMessages();
 });
 

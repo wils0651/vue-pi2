@@ -14,5 +14,6 @@ export function formatDate3(date) {
 }
 
 export function formatDate(date) {
+  if (!date) return ''
   return format(date, 'M/d/yyyy h:mm:ss a')
 }
