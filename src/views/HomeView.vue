@@ -59,7 +59,7 @@ const probes = ref([]);
 const computerInfos = reactive([]);
 const probeDatas = reactive([]);
 const unclassifiedMessages = reactive([]);
-const garageStatus = ref({});
+const garageStatus = reactive({});
 
 const getComputerData = async () => {
   try {
@@ -108,15 +108,16 @@ const getProbeData = async (probeId) => {
 
 const getGarageStatus = async () => {
   try {
+    isLoadingGarageStatus.value = true;
     const result = await axios("http://192.168.50.3/api/GarageDistance/Latest");
     if (result.status === 200) {
-      console.log(result.data);
-      isLoadingGarageStatus.value = false;
-      garageStatus.value = result.data;
+      Object.assign(garageStatus, result.data);
     }
   } catch (error) {
     console.log("Failed to Get Garage Status");
     console.error(error);
+  } finally {
+    isLoadingGarageStatus.value = false
   }
 };
 
@@ -141,6 +142,13 @@ onMounted(async () => {
   };
   await getGarageStatus();
   await getUnclassifiedMessages();
+  setInterval(async () => {
+    await getComputerData();
+    // for (const probe of probes.value) {
+    //   await getProbeData(probe.probeId);
+    // };
+    await getGarageStatus();
+  }, 60000);
 });
 
 </script>
