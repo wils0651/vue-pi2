@@ -142,11 +142,15 @@ onMounted(async () => {
   };
   await getGarageStatus();
   await getUnclassifiedMessages();
+
   setInterval(async () => {
     await getComputerData();
-    // for (const probe of probes.value) {
-    //   await getProbeData(probe.probeId);
-    // };
+    for (const probe of probes.value) {
+      let restOfProbeDatas = probeDatas.filter((pd) => pd.probeId != probe.probeId);
+      probeDatas.splice(0, probeDatas.length, ...restOfProbeDatas);
+
+      await getProbeData(probe.probeId);
+    };
     await getGarageStatus();
   }, 60000);
 });
