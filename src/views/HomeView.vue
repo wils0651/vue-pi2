@@ -25,9 +25,9 @@
 
     <h2 class="text-xl my-3 mx-4">Garage Status</h2>
     <div class="container mx-4">
-      <WaitCursor :busy="isLoadingGarageStatus" msg="Loading Garage Status..."></WaitCursor>
+      <WaitCursor :busy="isLoadingGarageInfo" msg="Loading Garage Info..."></WaitCursor>
       <div class="flex flex-wrap -mx-2">
-        <GarageData :garageStatus="garageStatus"></GarageData>
+        <GarageData :garageStatus="garageStatus" :garageEventLog="garageEvent"></GarageData>
       </div>
     </div>
 
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import ComputerInfo from "@/components/ComputerInfo.vue";
@@ -53,13 +53,19 @@ import GarageData from "@/components/GarageData.vue";
 const isLoadingComputerData = ref(true);
 const isLoadingProbeData = ref(true);
 const isLoadingGarageStatus = ref(true);
+const isLoadingGarageEvent = ref(true);
 const areAnyUnclassifiedMessages = ref(false);
+
+const isLoadingGarageInfo = computed(() => {
+  return isLoadingGarageStatus.value || isLoadingGarageEvent.value;
+});
 
 const probes = ref([]);
 const computerInfos = reactive([]);
 const probeDatas = reactive([]);
 const unclassifiedMessages = reactive([]);
 const garageStatus = reactive({});
+const garageEvent = reactive([]);
 
 const getComputerData = async () => {
   try {
@@ -121,6 +127,22 @@ const getGarageStatus = async () => {
   }
 };
 
+const getGarageEvent = async () => {
+  try {
+    isLoadingGarageEvent.value = true;
+    const result = await axios("http://192.168.50.3/api/GarageEventLog/Latest")
+    if (result.status === 200) {
+      Object.assign(garageEvent, result.data);
+    }
+  } catch (error) {
+    console.log("Failed to Get Garage Event");
+    console.error(error);
+  } finally {
+    isLoadingGarageEvent.value = false
+  }
+};
+
+
 const getUnclassifiedMessages = async () => {
   try {
     const result = await axios("http://192.168.50.3/api/UnclassifiedMessage/Latest/5");
@@ -141,6 +163,7 @@ onMounted(async () => {
     await getProbeData(probe.probeId);
   };
   await getGarageStatus();
+  await getGarageEvent();
   await getUnclassifiedMessages();
 
   setInterval(async () => {
@@ -152,6 +175,7 @@ onMounted(async () => {
       await getProbeData(probe.probeId);
     };
     await getGarageStatus();
+    await getGarageEvent();
   }, 60000);
 });
 
