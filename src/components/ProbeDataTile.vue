@@ -1,5 +1,6 @@
 <template>
-  <div div class="border border-gray-800 bg-gray-200 m-3 rounded-sm max-w-lg">
+  <div div :class="probeData.isStale ? 'bg-red-200' : 'bg-gray-200'"
+    class="border border-gray-800 m-3 rounded-sm max-w-lg">
     <div class="mx-3 my-2">
       {{ probeData.probeDescription }}
     </div>
