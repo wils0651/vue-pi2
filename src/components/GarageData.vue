@@ -2,7 +2,7 @@
   <div :class="garageStatus.isStale
     ? 'bg-orange-200'
     : garageStatus.garageStatusId === 3
-      ? 'bg-red-200'
+      ? 'bg-red-400'
       : 'bg-gray-200'" class="border border-gray-800  m-3 rounded-sm max-w-lg">
     <div v-if="garageStatus.garageStatusId" class="mx-3 my-2">
       {{ garageStatus.garageStatusName }}
