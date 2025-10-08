@@ -1,5 +1,5 @@
 <template>
-  <div :class="computerInfo.isStale ? 'bg-red-200' : 'bg-gray-200'"
+  <div :class="computerInfo.isStale ? 'bg-orange-200' : 'bg-gray-200'"
     class="border border-gray-800 m-3 rounded-sm max-w-lg">
     <div class="mx-3 my-2">
       <router-link :to="{ name: 'computer', params: { computerId: computerInfo.computerId } }"
