@@ -16,17 +16,19 @@
           {{ formatDate(garageStatus.createdDate) }}
         </p>
       </div>
-      <div class="flex flex-row border border-gray-300 rounded-sm bg-gray-100">
-        <p v-if="garageEventLog" class="text-m text-gray-800 tracking-tight my-2 mr-2 border-gray-500 pl-2">
-          Last Event: {{ formatDate(garageEventLog.createdDate) }} - {{ garageEventLog.garageEventTypeName }}
-        </p>
+      <div v-if="garageEventLog" class="flex flex-row border border-gray-300 rounded-sm bg-gray-100">
+        <p class="text-m font-bold text-gray-800 tracking-tight my-2 ml-2 mr-2">Last Event</p>
+        <p class="text-m text-gray-800 tracking-tight my-2 mr-2 border-l border-gray-500 pl-2">
+          {{ garageEventLog.garageEventTypeName }}</p>
+        <p class="text-m text-gray-800 tracking-tight my-2 mr-2 border-l border-gray-500 pl-2">
+          {{ formatDateNoSeconds(garageEventLog.createdDate) }}</p>
       </div>
     </router-link>
   </div>
 </template>
 
 <script setup>
-import { formatDate } from "@/shared/formatters";
+import { formatDate, formatDateNoSeconds } from "@/shared/formatters";
 
 defineProps({
   garageStatus: { required: true, type: Object },

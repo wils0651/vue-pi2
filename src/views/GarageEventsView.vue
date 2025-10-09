@@ -16,7 +16,7 @@
           <tr v-for="(garageEvent, garageEventLogId) in garageEvents" :key="garageEventLogId"
             class="odd:bg-white even:bg-gray-100 hover:bg-gray-50">
             <td class="px-4 py-2 border border-gray-300">{{ garageEvent.garageEventTypeName }}</td>
-            <td class="px-4 py-2 border border-gray-300">{{ formatDate(garageEvent.createdDate) }}</td>
+            <td class="px-4 py-2 border border-gray-300">{{ formatDateNoSeconds(garageEvent.createdDate) }}</td>
           </tr>
         </tbody>
       </table>
@@ -28,7 +28,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
-import { formatDate } from "@/shared/formatters";
+import { formatDateNoSeconds } from "@/shared/formatters";
 
 const isBusy = ref(false);
 const garageEvents = ref([]);

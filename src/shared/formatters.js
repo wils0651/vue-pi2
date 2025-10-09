@@ -17,3 +17,8 @@ export function formatDate(date) {
   if (!date) return ''
   return format(date, 'M/d/yyyy h:mm:ss a')
 }
+
+export function formatDateNoSeconds(date) {
+  if (!date) return ''
+  return format(date, 'M/d/yyyy h:mm a')
+}
