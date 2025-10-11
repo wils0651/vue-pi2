@@ -1,7 +1,7 @@
 <template>
-  <div :class="computerInfo.isStale ? 'bg-orange-200' : 'bg-gray-200'"
-    class="border border-gray-800 m-3 rounded-sm max-w-lg">
-    <router-link :to="{ name: 'computer', params: { computerId: computerInfo.computerId } }">
+  <router-link :to="{ name: 'computer', params: { computerId: computerInfo.computerId } }">
+    <div :class="computerInfo.isStale ? 'bg-orange-200' : 'bg-gray-200'"
+      class="border border-gray-800 m-3 rounded-sm max-w-lg">
       <div class="mx-3 my-2">
         <div class="text-xl font-bold text-gray-800 tracking-tight mb-2">
           {{ computerInfo.computerName }}</div>
@@ -21,8 +21,8 @@
             formatDate(computerInfo.messageDate) }}</p>
         </div>
       </div>
-    </router-link>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <script setup>

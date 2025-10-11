@@ -1,10 +1,10 @@
 <template>
-  <div :class="garageStatus.isStale
-    ? 'bg-orange-200'
-    : garageStatus.garageStatusId === 3
-      ? 'bg-red-400'
-      : 'bg-gray-200'" class="border border-gray-800  m-3 rounded-sm max-w-lg">
-    <router-link :to="{ name: 'garageEvents' }">
+  <router-link :to="{ name: 'garageEvents' }">
+    <div :class="garageStatus.isStale
+      ? 'bg-orange-200'
+      : garageStatus.garageStatusId === 3
+        ? 'bg-red-400'
+        : 'bg-gray-200'" class="border border-gray-800  m-3 rounded-sm max-w-lg">
       <div v-if="garageStatus.garageStatusId" class="mx-3 my-2">
         {{ garageStatus.garageStatusName }}
       </div>
@@ -23,8 +23,8 @@
         <p class="text-m text-gray-800 tracking-tight my-2 mr-2 border-l border-gray-500 pl-2">
           {{ formatDateNoSeconds(garageEventLog.createdDate) }}</p>
       </div>
-    </router-link>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <script setup>
