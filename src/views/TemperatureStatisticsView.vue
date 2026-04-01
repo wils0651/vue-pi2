@@ -4,7 +4,7 @@
   </header>
   <main>
     <div class="container mx-4">
-      <Line :data="datas" :options="chartOptions">Data not available</Line>
+      <Line :data="datas" :options="chartOptions" :plugins="[errorBarsPlugin]">Data not available</Line>
     </div>
   </main>
 </template>
@@ -22,6 +22,43 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale
 
 const probes = ref([]);
 const temperatureMeanDatas = ref([]);
+
+const errorBarsPlugin = {
+  id: 'errorBars',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+    chart.data.datasets.forEach((dataset, datasetIndex) => {
+      const meta = chart.getDatasetMeta(datasetIndex);
+      if (meta.hidden) return;
+      meta.data.forEach((element, index) => {
+        const point = dataset.data[index];
+        if (point?.yMin == null || point?.yMax == null) return;
+        const x = element.x;
+        const yMin = chart.scales.y.getPixelForValue(point.yMin);
+        const yMax = chart.scales.y.getPixelForValue(point.yMax);
+        ctx.save();
+        ctx.strokeStyle = dataset.backgroundColor || 'rgba(0,0,0,0.8)';
+        ctx.lineWidth = 1.5;
+        // Vertical bar
+        ctx.beginPath();
+        ctx.moveTo(x, yMin);
+        ctx.lineTo(x, yMax);
+        ctx.stroke();
+        // Top cap
+        ctx.beginPath();
+        ctx.moveTo(x - 4, yMin);
+        ctx.lineTo(x + 4, yMin);
+        ctx.stroke();
+        // Bottom cap
+        ctx.beginPath();
+        ctx.moveTo(x - 4, yMax);
+        ctx.lineTo(x + 4, yMax);
+        ctx.stroke();
+        ctx.restore();
+      });
+    });
+  }
+};
 
 const datas = computed(() => {
   return {
@@ -90,8 +127,10 @@ const getProbeData = async (probeId) => {
     const result = await axios(`http://192.168.50.3/api/TemperatureStatistic/List/${probeId}`);
     if (result.status === 200) {
       temperatureMeanDatas.value[probeId] = result.data.map((entry) => ({
-        x: new Date(entry.measurementDate), // Convert to Date object for Chart.js time scale
+        x: new Date(entry.measurementDate),
         y: entry.mean,
+        yMin: entry.mean - 2 * entry.standardDeviation,
+        yMax: entry.mean + 2 * entry.standardDeviation,
       }));
     }
   } catch (error) {
