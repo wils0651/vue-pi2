@@ -124,7 +124,12 @@ const getProbes = async () => {
 
 const getProbeData = async (probeId) => {
   try {
-    const result = await axios(`http://192.168.50.3/api/TemperatureStatistic/List/${probeId}`);
+    const startDate = new Date();
+    startDate.setFullYear(startDate.getFullYear() - 1);
+
+    const result = await axios(`http://192.168.50.3/api/TemperatureStatistic/List/${probeId}`, {
+      params: { startDate: startDate.toISOString() },
+    });
     if (result.status === 200) {
       temperatureMeanDatas.value[probeId] = result.data.map((entry) => ({
         x: new Date(entry.measurementDate),
