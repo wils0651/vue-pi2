@@ -49,6 +49,7 @@ import ComputerInfo from "@/components/ComputerInfo.vue";
 import ProbeDataTile from "@/components/ProbeDataTile.vue";
 import UnclassifiedMessageGrid from "@/components/UnclassifiedMessageGrid.vue";
 import GarageData from "@/components/GarageData.vue";
+import { API_BASE_URL } from "@/shared/constants";
 
 const isLoadingComputerData = ref(true);
 const isLoadingProbeData = ref(true);
@@ -70,7 +71,7 @@ const garageEvent = reactive([]);
 const getComputerData = async () => {
   try {
     isLoadingComputerData.value = true;
-    const result = await axios("http://192.168.50.3/api/Computer/ComputerInfo/List");
+    const result = await axios(`${API_BASE_URL}/api/Computer/ComputerInfo/List`);
     if (result.status === 200) {
       computerInfos.splice(0, computerInfos.length, ...result.data);
     }
@@ -83,7 +84,7 @@ const getComputerData = async () => {
 
 const getProbes = async () => {
   try {
-    const result = await axios("http://192.168.50.3/api/Probe");
+    const result = await axios(`${API_BASE_URL}/api/Probe`);
     if (result.status === 200) {
       probes.value = result.data.map((entry) => ({
         probeId: entry.probeId,
@@ -100,7 +101,7 @@ const getProbes = async () => {
 const getProbeData = async (probeId) => {
   try {
     isLoadingProbeData.value = true;
-    const result = await axios(`http://192.168.50.3/api/ProbeData/Latest/${probeId}`);
+    const result = await axios(`${API_BASE_URL}/api/ProbeData/Latest/${probeId}`);
     if (result.status === 200) {
       probeDatas.splice(probeDatas.length, probeDatas.length, result.data);
     }
@@ -115,7 +116,7 @@ const getProbeData = async (probeId) => {
 const getGarageStatus = async () => {
   try {
     isLoadingGarageStatus.value = true;
-    const result = await axios("http://192.168.50.3/api/GarageDistance/Latest");
+    const result = await axios(`${API_BASE_URL}/api/GarageDistance/Latest`);
     if (result.status === 200) {
       Object.assign(garageStatus, result.data);
     }
@@ -130,7 +131,7 @@ const getGarageStatus = async () => {
 const getGarageEvent = async () => {
   try {
     isLoadingGarageEvent.value = true;
-    const result = await axios("http://192.168.50.3/api/GarageEventLog/Latest")
+    const result = await axios(`${API_BASE_URL}/api/GarageEventLog/Latest`)
     if (result.status === 200) {
       Object.assign(garageEvent, result.data);
     }
@@ -145,7 +146,7 @@ const getGarageEvent = async () => {
 
 const getUnclassifiedMessages = async () => {
   try {
-    const result = await axios("http://192.168.50.3/api/UnclassifiedMessage/Latest/5");
+    const result = await axios(`${API_BASE_URL}/api/UnclassifiedMessage/Latest/5`);
     if (result.status === 200) {
       unclassifiedMessages.splice(0, unclassifiedMessages.length, ...result.data);
       areAnyUnclassifiedMessages.value = unclassifiedMessages.length > 0;

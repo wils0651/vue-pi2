@@ -29,6 +29,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDateNoSeconds } from "@/shared/formatters";
+import { API_BASE_URL } from "@/shared/constants";
 
 const isBusy = ref(false);
 const garageEvents = ref([]);
@@ -40,7 +41,7 @@ onMounted(async () => {
 const getEvents = async () => {
   try {
     isBusy.value = true;
-    const result = await axios(`http://192.168.50.3/api/GarageEventLog/ListLatest`);
+    const result = await axios(`${API_BASE_URL}/api/GarageEventLog/ListLatest`);
     if (result.status === 200) {
       garageEvents.value = { ...result.data };
     }

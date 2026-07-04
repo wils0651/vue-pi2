@@ -33,6 +33,7 @@ import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDate } from "@/shared/formatters";
 import AddTodoItem from "@/components/AddTodoItem.vue";
+import { API_BASE_URL } from "@/shared/constants";
 
 const isBusy = ref(false);
 const todoItems = reactive([]);
@@ -40,7 +41,7 @@ const todoItems = reactive([]);
 const getTodoItems = async () => {
   try {
     isBusy.value = true;
-    const result = await axios("http://192.168.50.3/api/TodoItems");
+    const result = await axios(`${API_BASE_URL}/api/TodoItems`);
     if (result.status === 200) {
       todoItems.splice(0, todoItems.length, ...result.data);
     }

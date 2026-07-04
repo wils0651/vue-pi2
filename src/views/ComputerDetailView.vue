@@ -34,6 +34,7 @@ import { useRoute } from 'vue-router'
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
 import { formatDate } from "@/shared/formatters";
+import { API_BASE_URL } from "@/shared/constants";
 
 const isBusy = ref(false);
 const computerDetail = ref([]);
@@ -54,7 +55,7 @@ watch(
 const getDetails = async (computerId) => {
   try {
     isBusy.value = true;
-    const result = await axios(`http://192.168.50.3/api/Computer/computerDetail/${computerId}`);
+    const result = await axios(`${API_BASE_URL}/api/Computer/computerDetail/${computerId}`);
     if (result.status === 200) {
       computerDetail.value = { ...result.data };
     }

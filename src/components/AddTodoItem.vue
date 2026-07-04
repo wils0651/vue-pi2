@@ -20,6 +20,7 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { API_BASE_URL } from "@/shared/constants";
 
 const name = ref("");
 const isComplete = ref(false);
@@ -29,7 +30,7 @@ const emit = defineEmits(['reloadGrid']);
 
 async function addItem() {
   try {
-    await axios.post("http://192.168.50.3/api/TodoItems", {
+    await axios.post(`${API_BASE_URL}/api/TodoItems`, {
       name: name.value,
       isComplete: isComplete.value
     });

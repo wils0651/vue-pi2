@@ -17,6 +17,7 @@ import axios from "axios";
 import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
 import { getBackgroundColor } from '@/shared/chartColors';
+import { API_BASE_URL } from '@/shared/constants';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
@@ -68,7 +69,7 @@ const chartOptions = {
 
 const getProbes = async () => {
   try {
-    const result = await axios("http://192.168.50.3/api/Probe");
+    const result = await axios(`${API_BASE_URL}/api/Probe`);
     if (result.status === 200) {
       probes.value = result.data.map((entry) => ({
         probeId: entry.probeId,
@@ -84,7 +85,7 @@ const getProbes = async () => {
 
 const getProbeData = async (probeId) => {
   try {
-    const result = await axios(`http://192.168.50.3/api/ProbeData/List/${probeId}`);
+    const result = await axios(`${API_BASE_URL}/api/ProbeData/List/${probeId}`);
     if (result.status === 200) {
       probeDatas.value[probeId] = result.data.map((entry) => ({
         x: new Date(entry.createdDate), // Convert to Date object for Chart.js time scale

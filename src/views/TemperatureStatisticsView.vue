@@ -17,6 +17,7 @@ import axios from "axios";
 import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
 import { getBackgroundColor } from '@/shared/chartColors';
+import { API_BASE_URL } from '@/shared/constants';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale)
 
@@ -108,7 +109,7 @@ const chartOptions = {
 
 const getProbes = async () => {
   try {
-    const result = await axios("http://192.168.50.3/api/Probe");
+    const result = await axios(`${API_BASE_URL}/api/Probe`);
     if (result.status === 200) {
       probes.value = result.data.map((entry) => ({
         probeId: entry.probeId,
@@ -127,7 +128,7 @@ const getProbeData = async (probeId) => {
     const startDate = new Date();
     startDate.setFullYear(startDate.getFullYear() - 1);
 
-    const result = await axios(`http://192.168.50.3/api/TemperatureStatistic/List/${probeId}`, {
+    const result = await axios(`${API_BASE_URL}/api/TemperatureStatistic/List/${probeId}`, {
       params: { startDate: startDate.toISOString() },
     });
     if (result.status === 200) {
