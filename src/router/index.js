@@ -4,6 +4,7 @@ import TodoItems from '@/views/TodoItems.vue'
 import MessagesView from '@/views/MessagesView.vue'
 import ComputerDetailView from '@/views/ComputerDetailView.vue'
 import ProbeDataView from '@/views/ProbeDataView.vue'
+import ProbeDetailView from '@/views/ProbeDetailView.vue'
 import TemperatureStatisticsView from '@/views/TemperatureStatisticsView.vue'
 import GarageEventsView from '@/views/GarageEventsView.vue'
 
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/probeData',
       name: 'probeData',
       component: ProbeDataView,
+    },
+    {
+      path: '/probe/:probeId',
+      name: 'probeDetail',
+      component: ProbeDetailView,
     },
     {
       path: '/temperatureStatistics',
