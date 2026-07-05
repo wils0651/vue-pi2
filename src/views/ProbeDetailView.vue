@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, onUnmounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale } from 'chart.js'
@@ -222,9 +222,19 @@ const getYearlyStatistics = async () => {
   }
 };
 
+let refreshIntervalId = null;
+
 onMounted(async () => {
   await getProbe();
   await getLast24HoursData();
   await getYearlyStatistics();
+
+  refreshIntervalId = setInterval(async () => {
+    await getLast24HoursData();
+  }, 60000);
+});
+
+onUnmounted(() => {
+  clearInterval(refreshIntervalId);
 });
 </script>
