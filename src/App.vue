@@ -5,6 +5,7 @@
       <RouterLink to="/messages" class="hover:text-gray-200">Messages</RouterLink>
       <RouterLink to="/probeData" class="hover:text-gray-200">Probe Data</RouterLink>
       <RouterLink to="/temperatureStatistics" class="hover:text-gray-200">Temperature Statistics</RouterLink>
+      <RouterLink to="/permitWatch" class="hover:text-gray-200">Permit Watch</RouterLink>
     </nav>
   </header>
   <main>
