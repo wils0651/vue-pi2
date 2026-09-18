@@ -61,6 +61,16 @@
           </tr>
         </tbody>
       </table>
+
+      <h2 class="text-2xl font-semibold text-gray-700 mt-6 mb-2">Edit Watch Config</h2>
+      <div v-for="watch in watchConfig" :key="watch.permitId" class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-700 mb-1">{{ watch.displayName }}</h3>
+        <WatchWindowEditor :permit-id="watch.permitId" :initial-start-date="watch.startDate"
+          :initial-end-date="watch.endDate" :initial-is-active="watch.isActive"
+          @reload-grid="getPermitWatch"></WatchWindowEditor>
+        <WatchCalendar :permit-id="watch.permitId" :start-date="watch.startDate" :end-date="watch.endDate"
+          :exceptions="watch.exceptions" @reload-grid="getPermitWatch"></WatchCalendar>
+      </div>
     </div>
   </main>
 </template>
@@ -69,6 +79,8 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import WaitCursor from "@/components/WaitCursor.vue";
+import WatchWindowEditor from "@/components/WatchWindowEditor.vue";
+import WatchCalendar from "@/components/WatchCalendar.vue";
 import { formatDateNoSeconds } from "@/shared/formatters";
 import { API_BASE_URL } from "@/shared/constants";
 
