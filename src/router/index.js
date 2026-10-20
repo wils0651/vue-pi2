@@ -7,6 +7,7 @@ import ProbeDataView from '@/views/ProbeDataView.vue'
 import ProbeDetailView from '@/views/ProbeDetailView.vue'
 import TemperatureStatisticsView from '@/views/TemperatureStatisticsView.vue'
 import GarageEventsView from '@/views/GarageEventsView.vue'
+import SnowForecastView from '@/views/SnowForecastView.vue'
 import PermitWatchView from '@/views/PermitWatchView.vue'
 
 const router = createRouter({
@@ -51,6 +52,11 @@ const router = createRouter({
       path: '/garageEvents',
       name: 'garageEvents',
       component: GarageEventsView,
+    },
+    {
+      path: '/snowForecast',
+      name: 'snowForecast',
+      component: SnowForecastView,
     },
     {
       path: '/permitWatch',
