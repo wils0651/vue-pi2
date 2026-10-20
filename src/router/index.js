@@ -8,6 +8,7 @@ import ProbeDetailView from '@/views/ProbeDetailView.vue'
 import TemperatureStatisticsView from '@/views/TemperatureStatisticsView.vue'
 import GarageEventsView from '@/views/GarageEventsView.vue'
 import SnowForecastView from '@/views/SnowForecastView.vue'
+import PermitWatchView from '@/views/PermitWatchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: '/snowForecast',
       name: 'snowForecast',
       component: SnowForecastView,
+    },
+    {
+      path: '/permitWatch',
+      name: 'permitWatch',
+      component: PermitWatchView,
     },
   ],
 })
