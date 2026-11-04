@@ -11,8 +11,8 @@ PROJECT_DIR="/home/tim/Repos/vue-pi2"
 echo "Changing to project directory: $PROJECT_DIR"
 cd "$PROJECT_DIR"
 
-echo "Git Pull"
-git pull
+# echo "Git Pull"
+# git pull
 
 echo "NPM"
 npm install

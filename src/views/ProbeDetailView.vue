@@ -16,6 +16,16 @@
         Data not available
       </Line>
     </div>
+
+    <h2 class="text-xl my-3 mx-4">Mean Temperature - Year over Year</h2>
+    <p class="text-gray-500 text-sm mb-2 mx-4">
+      Each line is a 12-month window of daily means, shifted onto the same axis so the years line up. Hover a
+      point to see its actual date.
+      <span v-if="yearOverYearSeries.length === 1">No earlier years of data for this probe yet.</span>
+    </p>
+    <div class="container mx-4">
+      <Line :data="yearOverYearData" :options="yearOverYearOptions">Data not available</Line>
+    </div>
   </main>
 </template>
 
@@ -25,6 +35,7 @@ import { useRoute } from "vue-router";
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale } from 'chart.js'
 import axios from "axios";
+import { format } from 'date-fns';
 import 'chartjs-adapter-date-fns';
 import { enUS } from 'date-fns/locale';
 import { API_BASE_URL } from '@/shared/constants';
@@ -39,6 +50,7 @@ const last24HoursPoints = ref([]);
 const meanPoints = ref([]);
 const minimumPoints = ref([]);
 const maximumPoints = ref([]);
+const yearOverYearSeries = ref([]);
 
 const errorBarsPlugin = {
   id: 'errorBars',
@@ -155,6 +167,61 @@ const yearlyStatisticsOptions = {
   },
 };
 
+// Newest first: the current 12 months in the strong purple, earlier years in the other palette colours.
+const YEAR_COLORS = [
+  'rgba(131, 52, 235, 0.9)',
+  'rgba(252, 186, 3, 0.9)',
+  'rgba(252, 3, 3, 0.8)',
+  'rgba(5, 180, 170, 0.9)',
+  'rgba(52, 160, 80, 0.9)',
+  'rgba(138, 2, 153, 0.8)',
+];
+
+const yearOverYearData = computed(() => ({
+  datasets: yearOverYearSeries.value.map((series, i) => ({
+    label: series.label,
+    data: series.points,
+    borderColor: YEAR_COLORS[i % YEAR_COLORS.length],
+    backgroundColor: YEAR_COLORS[i % YEAR_COLORS.length],
+    borderWidth: i === 0 ? 2.5 : 1.5,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    tension: 0.2,
+  })),
+}));
+
+const yearOverYearOptions = {
+  responsive: true,
+  interaction: { mode: 'nearest', axis: 'x', intersect: false },
+  plugins: {
+    legend: { display: true, position: 'top' },
+    tooltip: {
+      callbacks: {
+        // The x value is the shifted date; show the real one.
+        title: (items) => format(items[0].raw.date, 'MMM d, yyyy'),
+        label: (item) => `${item.dataset.label}: ${item.parsed.y.toFixed(1)} °F`,
+      },
+    },
+  },
+  scales: {
+    x: {
+      adapters: { date: { locale: enUS } },
+      type: 'time',
+      time: { unit: 'month', displayFormats: { month: 'MMM yyyy' } },
+      title: { display: true, text: 'Date (past 12 months)' },
+    },
+    y: {
+      title: { display: true, text: 'Mean temperature (°F)' },
+    },
+  },
+};
+
+const addYears = (date, years) => {
+  const shifted = new Date(date);
+  shifted.setFullYear(shifted.getFullYear() + years);
+  return shifted;
+};
+
 const getProbe = async () => {
   try {
     const result = await axios(`${API_BASE_URL}/api/Probe/${probeId}`);
@@ -222,12 +289,49 @@ const getYearlyStatistics = async () => {
   }
 };
 
+// Daily means grouped into consecutive 12-month windows ending now (0 = past 12 months, 1 = the 12 months
+// before that, ...). Earlier windows are shifted forward by their age so they overlay the current one.
+const getYearOverYear = async () => {
+  try {
+    const result = await axios(`${API_BASE_URL}/api/TemperatureStatistic/List/${probeId}`);
+    if (result.status !== 200) return;
+
+    const now = new Date();
+    const entries = result.data.map((entry) => ({ date: new Date(entry.measurementDate), mean: entry.mean }));
+    const earliest = entries.reduce((min, e) => (e.date < min ? e.date : min), now);
+
+    const series = [];
+    // A window can only hold data if it ends after the earliest measurement.
+    for (let age = 0; addYears(now, -age) > earliest; age++) {
+      const windowStart = addYears(now, -(age + 1));
+      const windowEnd = addYears(now, -age);
+      const points = entries
+        .filter((e) => e.date > windowStart && e.date <= windowEnd)
+        .sort((a, b) => a.date - b.date)
+        .map((e) => ({ x: addYears(e.date, age), y: e.mean, date: e.date }));
+      if (points.length) {
+        series.push({
+          label: age === 0
+            ? 'Past 12 months'
+            : `${format(windowStart, 'MMM yyyy')} – ${format(windowEnd, 'MMM yyyy')}`,
+          points,
+        });
+      }
+    }
+    yearOverYearSeries.value = series;
+  } catch (error) {
+    console.log("Failed to Get Year Over Year Statistics");
+    console.error(error);
+  }
+};
+
 let refreshIntervalId = null;
 
 onMounted(async () => {
   await getProbe();
   await getLast24HoursData();
   await getYearlyStatistics();
+  await getYearOverYear();
 
   refreshIntervalId = setInterval(async () => {
     await getLast24HoursData();
