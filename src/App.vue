@@ -7,6 +7,7 @@
       <RouterLink to="/temperatureStatistics" class="hover:text-gray-200">Temperature Statistics</RouterLink>
       <RouterLink to="/snowForecast" class="hover:text-gray-200">Snow Forecast</RouterLink>
       <RouterLink to="/snowHistory" class="hover:text-gray-200">Snow History</RouterLink>
+      <RouterLink to="/snowModelPerformance" class="hover:text-gray-200">Model Performance</RouterLink>
       <RouterLink to="/permitWatch" class="hover:text-gray-200">Permit Watch</RouterLink>
     </nav>
   </header>

@@ -9,6 +9,7 @@ import TemperatureStatisticsView from '@/views/TemperatureStatisticsView.vue'
 import GarageEventsView from '@/views/GarageEventsView.vue'
 import SnowForecastView from '@/views/SnowForecastView.vue'
 import SnowHistoryView from '@/views/SnowHistoryView.vue'
+import SnowModelPerformanceView from '@/views/SnowModelPerformanceView.vue'
 import PermitWatchView from '@/views/PermitWatchView.vue'
 
 const router = createRouter({
@@ -63,6 +64,11 @@ const router = createRouter({
       path: '/snowHistory',
       name: 'snowHistory',
       component: SnowHistoryView,
+    },
+    {
+      path: '/snowModelPerformance',
+      name: 'snowModelPerformance',
+      component: SnowModelPerformanceView,
     },
     {
       path: '/permitWatch',
